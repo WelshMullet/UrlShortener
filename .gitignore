@@ -46,3 +46,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+
+### Generated Code ###
+.openapi-generator
+src/main/java/io/github/welshmullet/urlshortener/api/
+src/main/java/io/github/welshmullet/urlshortener/model/
