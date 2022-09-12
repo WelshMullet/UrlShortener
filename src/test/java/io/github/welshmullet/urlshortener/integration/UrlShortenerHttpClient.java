@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import io.github.welshmullet.urlshortener.model.UrlRequest;
-import io.github.welshmullet.urlshortener.model.UrlResponse;
+import io.github.welshmullet.urlshortener.generated.model.UrlRequest;
+import io.github.welshmullet.urlshortener.generated.model.UrlResponse;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 

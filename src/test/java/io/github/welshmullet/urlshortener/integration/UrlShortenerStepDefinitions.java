@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.github.welshmullet.urlshortener.model.UrlResponse;
+import io.github.welshmullet.urlshortener.generated.model.UrlResponse;
 
 public class UrlShortenerStepDefinitions {
 

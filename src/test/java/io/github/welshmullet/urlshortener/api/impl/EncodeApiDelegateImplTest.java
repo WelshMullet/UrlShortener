@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.welshmullet.urlshortener.model.UrlRequest;
+import io.github.welshmullet.urlshortener.generated.model.UrlRequest;
 
 class EncodeApiDelegateImplTest {
 	private final EncodeApiDelegateImpl encodeApiDelegateImpl = new EncodeApiDelegateImpl();
