@@ -1,0 +1,96 @@
+openapi: "3.0.3"
+info:
+  version: 1.0.0
+  title: URL Shortener
+  description: Simple URL Shortning service conforming to requirements provided by TPXImpact as part of technical interview
+  license:
+    name: MIT
+  contact:
+    name: Daniel Dowling
+    email: daniel.dowling1@ntlworld.com
+servers:
+  - url: http://localhost:8080/
+paths:
+  /encode:
+    post:
+      summary: Encode a URL
+      operationId: encodeUrl
+      requestBody: 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UrlRequest"
+      tags:
+        - encode
+      responses:
+        '201':
+          description: URL encoded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UrlResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /decode:
+    post:
+      summary: Decode a URL
+      operationId: decodeUrl
+      requestBody: 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UrlRequest"
+      tags:
+        - decode
+      responses:
+        '200':
+          description: URL encoded successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UrlResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+        '500':
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+components:
+  schemas:
+    UrlRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    UrlResponse:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    ApiError:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
