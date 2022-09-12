@@ -1,5 +1,7 @@
 package io.github.welshmullet.urlshortener.api.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,10 @@ public class DecodeApiDelegateImpl implements DecodeApiDelegate {
 
 	@Override
 	public ResponseEntity<UrlResponse> decodeUrl(UrlRequest urlRequest) {
-		return ResponseEntity.ok(new UrlResponse().url(encodedUrlStorage.retrieveOriginalUrl(urlRequest.getUrl())));
+		final Optional<ResponseEntity<UrlResponse>> result = Optional
+				.ofNullable(encodedUrlStorage.retrieveOriginalUrl(urlRequest.getUrl()))
+				.map(url -> ResponseEntity.ok(new UrlResponse().url(url)));
+
+		return result.orElseThrow(() -> new NotFoundException());
 	}
 }

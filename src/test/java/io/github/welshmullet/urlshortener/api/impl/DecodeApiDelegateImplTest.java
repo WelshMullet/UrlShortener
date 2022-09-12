@@ -3,6 +3,7 @@ package io.github.welshmullet.urlshortener.api.impl;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,6 +31,15 @@ class DecodeApiDelegateImplTest {
 		final ResponseEntity<UrlResponse> response = decodeApiDelegateImpl
 				.decodeUrl(new UrlRequest().url(testEncodedUrl));
 		assertEquals(responseUrl, response.getBody().getUrl());
+	}
+
+	@Test
+	void testThatImplementationThrowsNotFoundExceptionIfNoMatchingStoredUrl() {
+		final String testEncodedUrl = "https://localhost/api/12345";
+		when(mockEncodedUrlStorage.retrieveOriginalUrl(testEncodedUrl)).thenReturn(null);
+		Assertions.assertThrows(NotFoundException.class, () -> {
+			decodeApiDelegateImpl.decodeUrl(new UrlRequest().url(testEncodedUrl));
+		});
 	}
 
 }
