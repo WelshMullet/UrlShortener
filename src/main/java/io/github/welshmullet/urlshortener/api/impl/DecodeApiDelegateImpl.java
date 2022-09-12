@@ -11,6 +11,12 @@ import io.github.welshmullet.urlshortener.generated.api.DecodeApiDelegate;
 import io.github.welshmullet.urlshortener.generated.model.UrlRequest;
 import io.github.welshmullet.urlshortener.generated.model.UrlResponse;
 
+/**
+ * Implementation for the /decode endpoint
+ * 
+ * @author Daniel
+ *
+ */
 @Service
 public class DecodeApiDelegateImpl implements DecodeApiDelegate {
 	@Autowired

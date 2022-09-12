@@ -7,6 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = { "io.github.welshmullet.urlshortener", "io.github.welshmullet.urlshortener.api",
 		"io.github.welshmullet.urlshortener.model" })
+/**
+ * Basic Spring boilerplate definition of an application
+ * @author Daniel
+ *
+ */
 public class UrlShortenerApplication {
 
 	public static void main(String[] args) {

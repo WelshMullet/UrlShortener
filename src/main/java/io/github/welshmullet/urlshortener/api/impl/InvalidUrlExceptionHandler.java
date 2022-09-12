@@ -10,12 +10,26 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import io.github.welshmullet.urlshortener.generated.model.ApiError;
 
+/**
+ * Basic exception handler to allow constructing the correct error response when
+ * a provided URL is invalid.
+ * 
+ * @author Daniel
+ *
+ */
 @ControllerAdvice
 public class InvalidUrlExceptionHandler extends ResponseEntityExceptionHandler {
 
+	/**
+	 * 
+	 * @param invalidUrlException the exception that was thrown.
+	 * @param request             the web request that caused the exception.
+	 * @return a bad-request response with a suitable message.
+	 */
 	@ExceptionHandler(InvalidUrlException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ResponseEntity<Object> handleInvalidUrlException(InvalidUrlException notFoundException, WebRequest request) {
+	public ResponseEntity<Object> handleInvalidUrlException(InvalidUrlException invalidUrlException,
+			WebRequest request) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError().message("Provided URL is invalid"));
 	}
 

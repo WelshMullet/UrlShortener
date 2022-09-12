@@ -5,6 +5,14 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Simple implementation of {@link EncodedUrlStorage} using an in-memory map.
+ * Not thread-safe but no non-functional requirement, or functional requirements
+ * present that would require anything more complicated
+ * 
+ * @author Daniel
+ *
+ */
 @Component
 public class EncodedUrlStorageImpl implements EncodedUrlStorage {
 

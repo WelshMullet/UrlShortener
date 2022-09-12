@@ -1,5 +1,12 @@
 package io.github.welshmullet.urlshortener.api.impl;
 
+/**
+ * Simple exception to allow constructing the correct error response when a
+ * provided URL is invalid.
+ * 
+ * @author Daniel
+ *
+ */
 public class InvalidUrlException extends RuntimeException {
 
 	/**

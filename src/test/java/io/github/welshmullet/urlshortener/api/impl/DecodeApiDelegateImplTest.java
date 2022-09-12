@@ -26,7 +26,7 @@ class DecodeApiDelegateImplTest {
 	@Test
 	void testThatImplementaionDecodesStoredUrl() {
 		final String testEncodedUrl = "https://localhost/api/12345";
-		final String responseUrl = "www.google.com";
+		final String responseUrl = "https://www.google.com";
 		when(mockEncodedUrlStorage.retrieveOriginalUrl(testEncodedUrl)).thenReturn(responseUrl);
 		final ResponseEntity<UrlResponse> response = decodeApiDelegateImpl
 				.decodeUrl(new UrlRequest().url(testEncodedUrl));
