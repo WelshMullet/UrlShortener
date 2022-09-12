@@ -14,3 +14,8 @@ Feature: Decode endpoint behaviour
     When I POST to the decode endpoint with the second encoded URL
     Then I get a 200 response
     And the response contains the second decoded URL
+
+  Scenario: Application should gracefully handle a request to decode an encoded URL for which there is no stored URL
+    When I POST to the decode endpoint with a URL for which there is no encoded URL
+    Then I get a 404 response
+    And the response contains an error message

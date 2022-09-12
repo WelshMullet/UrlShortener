@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.github.welshmullet.urlshortener.generated.model.ApiError;
 import io.github.welshmullet.urlshortener.generated.model.UrlResponse;
+
 
 public class UrlShortenerStepDefinitions {
 	private static final String DEFAULT_URL = "www.google.com";
@@ -21,12 +25,16 @@ public class UrlShortenerStepDefinitions {
 	@Autowired
 	private UrlShortenerHttpClient urlShortenerHttpClient;
 
-	private ResponseEntity<UrlResponse> lastResponse;
+	private ResponseEntity<?> lastResponse;
 	private String lastDecodeRequest;
 	private Map<String, String> encodedDecodedPairs = new HashMap<>();
 
-	private String getLastResponseUrl() {
-		return lastResponse.getBody().getUrl();
+	private @NotNull String getLastResponseUrl() {
+		return ((ResponseEntity<UrlResponse>) lastResponse).getBody().getUrl();
+	}
+	
+	private @NotNull String getLastResponseErrorMessage() {
+		return ((ResponseEntity<ApiError>) lastResponse).getBody().getMessage();
 	}
 	
 	@Given("{int} URLs have been encoded")
@@ -89,5 +97,16 @@ public class UrlShortenerStepDefinitions {
 	@Then("the response contains the second decoded URL")
 	public void the_response_contains_the_second_decoded_url() {
 		assertEquals(DEFAULT_URL + 1, getLastResponseUrl());
+	}
+	
+	@Then("the response contains an error message")
+	public void the_response_contains_an_error_message() {
+		assertNotNull(getLastResponseErrorMessage());
+	}
+	
+	@When("I POST to the decode endpoint with a URL for which there is no encoded URL")
+	public void i_post_to_the_decode_endpoint_with_a_url_for_which_there_is_no_encoded_url() {
+		lastDecodeRequest = "www.anotherUrl.com";
+		lastResponse = urlShortenerHttpClient.postDecode("www.anotherUrl.com");
 	}
 }

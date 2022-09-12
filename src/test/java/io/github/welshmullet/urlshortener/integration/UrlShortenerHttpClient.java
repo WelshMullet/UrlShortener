@@ -4,12 +4,19 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.github.welshmullet.urlshortener.generated.model.ApiError;
 import io.github.welshmullet.urlshortener.generated.model.UrlRequest;
 import io.github.welshmullet.urlshortener.generated.model.UrlResponse;
 
+
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
+
+import java.io.IOException;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
@@ -32,12 +39,36 @@ public class UrlShortenerHttpClient {
 		return String.format(ENDPOINT_URL_PATTERN, SERVER_URL, port, DECODE_ENDPOINT);
 	}
 
-	public ResponseEntity<UrlResponse> postEncode(final String url) {
-		return restTemplate.postForEntity(encodeEndpoint(), new UrlRequest().url(url), UrlResponse.class);
+	public ResponseEntity<?> postEncode(final String url) {
+		try {
+			return restTemplate.postForEntity(encodeEndpoint(), new UrlRequest().url(url), UrlResponse.class);
+		} catch (HttpClientErrorException e) {
+
+			try {
+				ObjectMapper objectMapper = new ObjectMapper();
+				ApiError error = objectMapper.readValue(e.getResponseBodyAsByteArray(), ApiError.class);
+				return ResponseEntity.status(e.getStatusCode()).body(error);
+			} catch (IOException e1) {
+				return null;
+			}
+
+		}
 	}
 
-	public ResponseEntity<UrlResponse> postDecode(final String url) {
-		return restTemplate.postForEntity(decodeEndpoint(), new UrlRequest().url(url), UrlResponse.class);
+	public ResponseEntity<?> postDecode(final String url) {
+		try {
+			return restTemplate.postForEntity(decodeEndpoint(), new UrlRequest().url(url), UrlResponse.class);
+		} catch (HttpClientErrorException e) {
+
+			try {
+				ObjectMapper objectMapper = new ObjectMapper();
+				ApiError error = objectMapper.readValue(e.getResponseBodyAsByteArray(), ApiError.class);
+				return ResponseEntity.status(e.getStatusCode()).body(error);
+			} catch (IOException e1) {
+				return null;
+			}
+
+		}
 	}
 
 }
