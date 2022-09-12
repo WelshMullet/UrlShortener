@@ -3,27 +3,41 @@ package io.github.welshmullet.urlshortener.integration;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.welshmullet.urlshortener.generated.model.UrlResponse;
 
 public class UrlShortenerStepDefinitions {
+	private static final String DEFAULT_URL = "www.google.com";
 
 	@Autowired
 	private UrlShortenerHttpClient urlShortenerHttpClient;
-	
+
 	private ResponseEntity<UrlResponse> lastResponse;
+	private String lastDecodeRequest;
+	private Map<String, String> encodedDecodedPairs = new HashMap<>();
 
 	private String getLastResponseUrl() {
 		return lastResponse.getBody().getUrl();
 	}
-	
+
+	@Given("a URL has been encoded")
+	public void a_url_has_been_encoded() {
+		lastResponse = urlShortenerHttpClient.postEncode(DEFAULT_URL);
+		encodedDecodedPairs.put(DEFAULT_URL, getLastResponseUrl());
+	}
+
 	@When("I POST to the encode endpoint with the URL {string}")
 	public void i_post_to_the_encode_endpoint_with_the_url(String string) {
 		lastResponse = urlShortenerHttpClient.postEncode(string);
+		encodedDecodedPairs.put(string, getLastResponseUrl());
 	}
 
 	@Then("I get a {int} response")
@@ -35,4 +49,16 @@ public class UrlShortenerStepDefinitions {
 	public void the_response_contains_an_encoded_url() {
 		assertNotNull(getLastResponseUrl());
 	}
+
+	@When("I POST to the decode endpoint with the encoded URL")
+	public void i_post_to_the_decode_endpoint_with_the_url() {
+		lastDecodeRequest = getLastResponseUrl();
+		lastResponse = urlShortenerHttpClient.postDecode(getLastResponseUrl());
+	}
+
+	@Then("the response contains the correct decoded URL")
+	public void the_response_contains_the_correct_decoded_url() {
+		assertEquals(lastDecodeRequest, encodedDecodedPairs.get(getLastResponseUrl()));
+	}
+
 }
