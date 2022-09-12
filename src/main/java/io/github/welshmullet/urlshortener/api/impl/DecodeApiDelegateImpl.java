@@ -16,6 +16,6 @@ public class DecodeApiDelegateImpl implements DecodeApiDelegate {
 
 	@Override
 	public ResponseEntity<UrlResponse> decodeUrl(UrlRequest urlRequest) {
-		return null;
+		return ResponseEntity.ok(new UrlResponse().url(encodedUrlStorage.retrieveOriginalUrl(urlRequest.getUrl())));
 	}
 }
