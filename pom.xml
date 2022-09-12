@@ -98,8 +98,8 @@
                     ${project.basedir}/src/main/resources/swagger.yaml
                 </inputSpec>
                             <generatorName>spring</generatorName>
-                            <apiPackage>io.github.welshmullet.urlshortener.api</apiPackage>
-                            <modelPackage>io.github.welshmullet.urlshortener.model</modelPackage>
+                            <apiPackage>io.github.welshmullet.urlshortener.generated.api</apiPackage>
+                            <modelPackage>io.github.welshmullet.urlshortener.generated.model</modelPackage>
                             <output>${project.basedir}</output>
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <configOptions>
