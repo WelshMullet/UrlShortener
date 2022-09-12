@@ -4,7 +4,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +35,15 @@ class EncodeApiDelegateImplTest {
 	void testThatImplemenationStoresEncodedUrl() {
 		encodeApiDelegateImpl.encodeUrl(new UrlRequest().url(TEST_URL));
 		verify(mockEncodedUrlStorage).storeEncodedUrl(eq(TEST_URL), any());
+	}
+	
+	@Test
+	void testThatImplementationThrowsNotFoundExceptionIfUrlInvalid() {
+		final String testEncodedUrl = "not-a-url";
+		when(mockEncodedUrlStorage.retrieveOriginalUrl(testEncodedUrl)).thenReturn(null);
+		Assertions.assertThrows(InvalidUrlException.class, () -> {
+			encodeApiDelegateImpl.encodeUrl(new UrlRequest().url(testEncodedUrl));
+		});
 	}
 
 }
