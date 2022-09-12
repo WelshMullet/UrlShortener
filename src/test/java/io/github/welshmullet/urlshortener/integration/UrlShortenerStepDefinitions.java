@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,16 @@ public class UrlShortenerStepDefinitions {
 	private String getLastResponseUrl() {
 		return lastResponse.getBody().getUrl();
 	}
-
+	
+	@Given("{int} URLs have been encoded")
+	public void x_urls_have_been_encoded(final int quantity) {
+		IntStream.range(0, quantity).forEach(i -> {
+			String url = DEFAULT_URL + i;
+			lastResponse = urlShortenerHttpClient.postEncode(url);
+			encodedDecodedPairs.put(url, getLastResponseUrl());
+		});
+	}
+	
 	@Given("a URL has been encoded")
 	public void a_url_has_been_encoded() {
 		lastResponse = urlShortenerHttpClient.postEncode(DEFAULT_URL);
@@ -60,5 +70,24 @@ public class UrlShortenerStepDefinitions {
 	public void the_response_contains_the_correct_decoded_url() {
 		assertEquals(lastDecodeRequest, encodedDecodedPairs.get(getLastResponseUrl()));
 	}
+	
+	@When("I POST to the decode endpoint with the first encoded URL")
+	public void i_post_to_the_decode_endpoint_with_the_first_url() {
+		lastResponse = urlShortenerHttpClient.postDecode(encodedDecodedPairs.get(DEFAULT_URL + 0));
+	}
 
+	@When("I POST to the decode endpoint with the second encoded URL")
+	public void i_post_to_the_decode_endpoint_with_the_second_url() {
+		lastResponse = urlShortenerHttpClient.postDecode(encodedDecodedPairs.get(DEFAULT_URL + 1));
+	}
+
+	@Then("the response contains the first decoded URL")
+	public void the_response_contains_the_first_decoded_url() {
+		assertEquals(DEFAULT_URL + 0, getLastResponseUrl());
+	}
+
+	@Then("the response contains the second decoded URL")
+	public void the_response_contains_the_second_decoded_url() {
+		assertEquals(DEFAULT_URL + 1, getLastResponseUrl());
+	}
 }
