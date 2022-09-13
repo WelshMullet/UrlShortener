@@ -1,0 +1,25 @@
+Brief:
+
+Create a URL shortening service
+
+ACs:
+
+- When a URL is encoded, the application encodes the input and returns a unique shortened URL. 
+- When an encoded URL is sent in for decoding, the application decodes the input and return the original full URL.
+- The above encoding and decoding can be performed with multiple urls in sequence, for example:
+	Step 1: Encoding the URL “www.google.com”
+	Step 2: Encoding the URL “www.bing.com”
+	Step 3: Decoding the URL returned in step 1 to decode “www.url1.com”
+	Step 4: Decoding the URL returned in step 2 to decode “www.url2.com”
+	
+Things that are **not** expected in this challenge: 
+
+- We don’t expect the shortened URL to actually work when entered in a browser
+- No persistence is required through server restarts for the purpose of this challenge, 
+	but feel free to implement this if you want. Local runtime storage is fine too, such as in memory.
+
+Things that **are** expected in this challenge
+
+- The application should allow encoding and decoding any arbitrary URL that is posted to it
+- It is more important that the code is high quality, such as having good test coverage, 
+	being well written, and having good error handling, than for it to be highly functional.
