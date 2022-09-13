@@ -54,19 +54,37 @@ paths:
         - decode
       responses:
         '200':
-          description: URL encoded successfully
+          description: URL decoded successfully
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/UrlResponse"
-        '400':
-          description: Bad Request
+        '404':
+          description: No matching encoded URL 
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ApiError"
         '500':
           description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+  /url/{id}:
+    get:
+      description: Decodes and redirects the request to the stored url  
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string            
+      responses:
+        '302':
+          description: Successful redirect to decoded url
+        '404':
+          description: No matching encoded URL 
           content:
             application/json:
               schema:
